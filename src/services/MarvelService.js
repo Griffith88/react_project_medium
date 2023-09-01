@@ -1,7 +1,7 @@
 class MarvelService {
-  _apiBase = 'https://gateway.marvel.com:443/v1/public/'
-  _apiKey = 'apikey=911491da94c06b74a312695c7f9aa182'
-    
+  _apiBase = "https://gateway.marvel.com:443/v1/public/";
+  _apiKey = "apikey=911491da94c06b74a312695c7f9aa182";
+
   getResource = async (url) => {
     let res = await fetch(url);
 
@@ -14,16 +14,33 @@ class MarvelService {
     return await res.json();
   };
 
-  getAllCharacters = () => {
-    return this.getResource(
+  getAllCharacters = async () => {
+    const res = await this.getResource(
       `${this._apiBase}characters?limit=9&offset=333&${this._apiKey}`
     );
+    return res.data.results.map(this._transformCharacter);
   };
 
-  getCharacter = (uid) => {
-    return this.getResource(
+  getCharacter = async (uid) => {
+    const res = await this.getResource(
       `${this._apiBase}characters/${uid}?${this._apiKey}`
     );
+    return this._transformCharacter(res.data.results[0]);
+  };
+
+  _transformCharacter = (char) => {
+    const [homepage, wiki] = char.urls;
+    if (!char.description) {
+      char.description = "Описание для данного персонажа пока отсутствует";
+    }
+
+    return {
+      name: char.name,
+      description: char.description,
+      thumbnail: char.thumbnail.path + "." + char.thumbnail.extension,
+      homepage: homepage.url,
+      wiki: wiki.url,
+    };
   };
 }
 
