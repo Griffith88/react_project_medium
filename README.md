@@ -1,1 +1,1 @@
-# react_project_medium
+# средний проект по react 
