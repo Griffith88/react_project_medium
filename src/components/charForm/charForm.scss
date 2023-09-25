@@ -6,6 +6,21 @@
     width: 100%;
     min-height: 127px;
   }
+  &-wrapper {
+    display: flex;
+    margin-top: 22px;
+    justify-content: space-between;
+  }
+  &-success {
+    font-family: Roboto Condensed;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #03710E;
+
+  }
 }
 
 .search {
@@ -38,4 +53,15 @@
     display: flex;
     justify-content: space-between;
   }
+}
+
+.error {
+  margin-top: 25px;
+  font-family: Roboto Condensed;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 21px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #9f0013;
 }

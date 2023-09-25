@@ -23,8 +23,10 @@ const useMarvelService = () => {
   };
 
   const getCharacterByName = async (name) => {
-    const res = await request(`${_apiBase}characters?${_apiKey}&${name}`);
-    return _transformCharacter(res.data.results[0]);
+    const res = await request(`${_apiBase}characters?${_apiKey}&name=${name}`);
+    const char = res.data.results.length > 0 ?  _transformCharacter(res.data.results[0]) : []
+    console.log(char)
+    return char
   };
 
   const getComic = async (id) => {
@@ -39,8 +41,8 @@ const useMarvelService = () => {
     return res.data.results.map(_transformComics);
   };
 
-
   const _transformCharacter = (char) => {
+
     const [homepage, wiki] = char.urls;
     if (!char.description) {
       char.description = "Описание для данного персонажа пока отсутствует";
@@ -80,7 +82,7 @@ const useMarvelService = () => {
     clearError,
     getAllComics,
     getComic,
-    getCharacterByName
+    getCharacterByName,
   };
 };
 
