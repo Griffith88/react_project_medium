@@ -63,7 +63,8 @@ const CharForm = () => {
       })}
       onChange={() => {
         clearError();
-        setProcess("waiting");
+        setProcess("waiting")
+        setChar(null);
       }}
     >
       <label className="search__label" htmlFor="">
