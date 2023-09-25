@@ -8,7 +8,8 @@ import { useState } from "react";
 
 const CharForm = () => {
   const [char, setChar] = useState(null);
-  const { loading, error, getCharacterByName, clearError } = useMarvelService();
+  const { getCharacterByName, clearError, process, setProcess } =
+    useMarvelService();
   const {
     register,
     handleSubmit,
@@ -22,14 +23,17 @@ const CharForm = () => {
   const updateChar = (name) => {
     clearError();
 
-    getCharacterByName(name).then(onCharLoaded);
+    getCharacterByName(name)
+      .then(onCharLoaded)
+      .then(() => setProcess("confirmed"));
   };
 
-  const errorMessage = error ? (
-    <div className="error">
-      <ErrorMessage />
-    </div>
-  ) : null;
+  const errorMessage =
+    process === "error" ? (
+      <div className="error">
+        <ErrorMessage />
+      </div>
+    ) : null;
 
   const results =
     char && char.length === 0 ? (
@@ -41,10 +45,7 @@ const CharForm = () => {
         <div className="char__form-success">
           There is! Visit {char.name} page?
         </div>
-        <Link
-          to={`/${char.id}`}
-          className="button button__secondary"
-        >
+        <Link to={`/${char.id}`} className="button button__secondary">
           <div className="inner">To page</div>
         </Link>
       </div>
@@ -60,7 +61,10 @@ const CharForm = () => {
       onSubmit={handleSubmit((fieldName) => {
         updateChar(fieldName.name);
       })}
-      onChange={clearError}
+      onChange={() => {
+        clearError();
+        setProcess("waiting");
+      }}
     >
       <label className="search__label" htmlFor="">
         Or find a character by name:
@@ -74,10 +78,12 @@ const CharForm = () => {
             required: true,
           })}
           placeholder="Enter name"
-          disabled={loading}
         />
 
-        <button className="button button__main">
+        <button
+          className="button button__main"
+          disabled={["confirmed", "loading"].includes(process)}
+        >
           <div className="inner">Find</div>
         </button>
       </div>

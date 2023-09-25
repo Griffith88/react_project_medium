@@ -1,7 +1,7 @@
 import { useHttp } from "../hooks/http.hook";
 
 const useMarvelService = () => {
-  const { loading, request, error, clearError } = useHttp();
+  const { request, clearError, process, setProcess } = useHttp();
 
   const _apiBase = "https://gateway.marvel.com:443/v1/public/";
   const _apiKey = "apikey=911491da94c06b74a312695c7f9aa182";
@@ -24,9 +24,11 @@ const useMarvelService = () => {
 
   const getCharacterByName = async (name) => {
     const res = await request(`${_apiBase}characters?${_apiKey}&name=${name}`);
-    const char = res.data.results.length > 0 ?  _transformCharacter(res.data.results[0]) : []
-    console.log(char)
-    return char
+    const char =
+      res.data.results.length > 0
+        ? _transformCharacter(res.data.results[0])
+        : [];
+    return char;
   };
 
   const getComic = async (id) => {
@@ -42,7 +44,6 @@ const useMarvelService = () => {
   };
 
   const _transformCharacter = (char) => {
-
     const [homepage, wiki] = char.urls;
     if (!char.description) {
       char.description = "Описание для данного персонажа пока отсутствует";
@@ -75,8 +76,8 @@ const useMarvelService = () => {
   };
 
   return {
-    loading,
-    error,
+    process,
+    setProcess,
     getAllCharacters,
     getCharacter,
     clearError,
